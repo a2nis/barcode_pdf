@@ -14,4 +14,13 @@ def generate_ean(valor):
     convert_upc = upc_a(valor) #877012000010
     qr_ean_upc = convert_upc.save(valor)
 
-generate_ean("877012000010")
+def read_data():
+  with open('Salidapazosnuevo.txt', 'r') as f:
+    for linea in f:
+      if not linea.strip():
+        continue
+      if linea.split("|")[0] == "C" and linea.split("|")[1] == "1":
+        print(linea)
+
+# generate_ean("877012000010")
+read_data()
