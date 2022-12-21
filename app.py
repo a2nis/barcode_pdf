@@ -14,6 +14,11 @@ def generate_ean(value):
     convert_upc = upc_a(value) #877012000010
     qr_ean_upc = convert_upc.save(value)
 
+def remove_leading_zero(string):
+  # string = "0000abc"
+  while string and string[0] == "0":
+    string = string[1:]
+  return string
 
 with open('Salidapazosnuevo.txt', 'r') as f:
   tickets = {}
@@ -25,13 +30,13 @@ with open('Salidapazosnuevo.txt', 'r') as f:
       ticket_number = values_line[3]
       tickets[ticket_number] = {'cashier_code': values_line[2], 'number_of_items': values_line[7], 'total_to_pay': values_line[8], 'qr_code': []}
     elif values_line[0] == "L" and values_line[2] == "1":
-      tickets[ticket_number]['qr_code'].append(values_line[25])
+      tickets[ticket_number]['qr_code'].append(remove_leading_zero(values_line[25]))
       
 for ticket_number, ticket_data in tickets.items():
+  print(ticket_number)
   for value in ticket_data["qr_code"]:
     print(value)
   # print(f'Ticket {ticket_number}: QRs = {ticket_data["qr_code"]}' )
 
 # generate_ean("877012000010")
 # read_data()
-print()
