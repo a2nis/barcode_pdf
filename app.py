@@ -1,4 +1,6 @@
 import barcode
+import re
+from collections import Counter
 
 def generate_ean(value):
   if len(value) == 13: 
@@ -15,9 +17,7 @@ def generate_ean(value):
     qr_ean_upc = convert_upc.save(value)
 
 def remove_leading_zero(string):
-  # string = "0000abc"
-  while string and string[0] == "0":
-    string = string[1:]
+  string = re.sub("^0+", "", string)
   return string
 
 with open('Salidapazosnuevo.txt', 'r') as f:
@@ -36,7 +36,9 @@ for ticket_number, ticket_data in tickets.items():
   print(ticket_number)
   for value in ticket_data["qr_code"]:
     print(value)
+    generate_ean(value)  
   # print(f'Ticket {ticket_number}: QRs = {ticket_data["qr_code"]}' )
 
-# generate_ean("877012000010")
+# print(Counter(tickets['1226']['qr_code']))
+
 # read_data()
