@@ -9,9 +9,12 @@
 </head>
 
 <body>
-  {% for imagen in imagenes %}
-    <div>
-      <p>{{ imagen.cantidad}}</p><img src="{{ imagen.qr }}" alt={{imagen.nombre}}}>
+  {% for ticket_number, ticket_data in tickets.items() %}
+    <div class="qr-contaner">
+    <p>{{ ticket_number}}</p>
+      {% for value in ticket_data["qr_code"] %}
+      <div class="qr-value"> <img src="/static/images/{{value}}.svg" alt={{value}}> </div>
+      {% endfor %}
     </div>
   {% endfor %}
 </body>

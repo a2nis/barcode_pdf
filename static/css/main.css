@@ -1,14 +1,28 @@
-div {
+.qr-value {
   width: 210px;
   height: 100px;
   border: 2px dashed black;
   margin: 5px;
   display: flex;
+  justify-content: center;
+  align-items: center;
+  /* border: solid 3px blue; */
+}
+
+.qr-contaner {
+  display: flex;
+  justify-content: flex-start;
+  align-items: baseline;
+  flex-direction: row ;
+  /* border: solid 3px red; */
+  flex-wrap: wrap;
+  align-content: stretch;
 }
 
 body {
   display: flex;
   flex-wrap: wrap;
   justify-content: left;
-  margin-top: 15px;
+  /* margin-top: 15px; */
+
 }

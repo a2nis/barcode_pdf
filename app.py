@@ -39,6 +39,7 @@ for ticket_number, ticket_data in tickets.items():
     generate_ean(value)  
   # print(f'Ticket {ticket_number}: QRs = {ticket_data["qr_code"]}' )
 
-# print(Counter(tickets['1226']['qr_code']))
+counter = Counter(tickets['1226']['qr_code'])['2700061004488']
+print(counter)
 
 # read_data()
