@@ -9,17 +9,24 @@ def generate_ean(value):
   images_dir = 'static/images/'
   if len(value) == 13: 
     hr = barcode.get_barcode_class('ean13')
-    Hr = hr(value)  #8430469156277
-    qr = Hr.save(f'{images_dir}{value}')
+    Hr = hr(value)  
+    generated_qr = Hr.save(f'{images_dir}{value}')
   if len(value) == 8:
     ean_8 = barcode.get_barcode_class('ean8')
-    convert_ean = ean_8(value) # 74200153
-    qr_ean8 = convert_ean.save(f'{images_dir}{value}')
+    convert_ean = ean_8(value) 
+    generated_qr = convert_ean.save(f'{images_dir}{value}')
   if len(value) == 12:
     upc_a = barcode.get_barcode_class('upca')
-    convert_upc = upc_a(value) #877012000010
-    qr_ean_upc = convert_upc.save(f'{images_dir}{value}')
-
+    convert_upc = upc_a(value) 
+    generated_qr = convert_upc.save(f'{images_dir}{value}')
+  if len(value) == 6:
+    upc_e = barcode.get_barcode_class('upce')
+    convert_upc = upc_e(value) 
+    generated_qr = convert_upc.save(f'{images_dir}{value}')
+  if len(value) == 9:
+    code39 = barcode.get_barcode_class('code39')
+    convert_upc = code39(value, add_checksum=False) 
+    generated_qr = convert_upc.save(f'{images_dir}{value}')
 
 def remove_leading_zero(string):
   string = re.sub("^0+", "", string)
@@ -33,10 +40,18 @@ def inicio():
 def mostrar_imagenes():
   with open('Salidapazosnuevo.txt', 'r') as f:
     tickets = {}
+    separator = {
+      True : '#',
+      False : '|'
+    }
     for line in f:
       if not line.strip():
         continue
-      values_line = line.split("|")
+      if "#" in line:
+        numeral_symbol = True
+      if "|" in line:
+        numeral_symbol = False
+      values_line = line.split(separator[numeral_symbol])
       if values_line[0] == "C" and values_line[1] == "1":
         ticket_number = values_line[3]
         tickets[ticket_number] = {'cashier_code': values_line[2], 'number_of_items': values_line[7], 'total_to_pay': values_line[8], 'qr_code': []}

@@ -25,7 +25,7 @@ with open('Salidapazosnuevo.txt', 'r') as f:
   for line in f:
     if not line.strip():
       continue
-    values_line = line.split("|")
+    values_line = line.split("#")
     if values_line[0] == "C" and values_line[1] == "1":
       ticket_number = values_line[3]
       tickets[ticket_number] = {'cashier_code': values_line[2], 'number_of_items': values_line[7], 'total_to_pay': values_line[8], 'qr_code': []}
