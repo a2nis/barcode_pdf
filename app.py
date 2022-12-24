@@ -41,5 +41,3 @@ for ticket_number, ticket_data in tickets.items():
 
 counter = Counter(tickets['1226']['qr_code'])['2700061004488']
 print(counter)
-
-# read_data()
