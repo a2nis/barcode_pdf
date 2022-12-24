@@ -13,9 +13,7 @@
     <div class="qr-contaner">
     <p>Caja: {{ticket_data["cashier_code"]}} -- Ticket: {{ ticket_number}} -- Cant Artículos: {{ticket_data["number_of_items"]}} -- Total a pagar: {{ticket_data["total_to_pay"]}} <br> </p>
       {% for value in ticket_data["qr_code"] %}
-        {% for i in range(2) %}
           <div class="qr-value"> <img src="/static/images/{{value}}.svg" alt={{value}}> </div>
-        {% endfor %}
       {% endfor %}
     </div>
   {% endfor %}

@@ -60,31 +60,16 @@ def mostrar_imagenes():
         ticket_number = values_line[3]
         tickets[ticket_number] = {'cashier_code': values_line[2], 'number_of_items': values_line[7], 'total_to_pay': values_line[8], 'qr_code': [], 'barcodes': []}
       elif values_line[0] == "L" and values_line[2] == "1":
-        tickets[ticket_number]['qr_code'].append(remove_leading_zero(values_line[25]))
-        # barcodes[remove_leading_zero(values_line[25])] = int(float(remove_leading_zero(values_line[5])))
-        # tickets[ticket_number]['barcodes'].append(barcodes)
-        tickets[ticket_number]['barcodes'].append(remove_leading_zero(values_line[25]))
-        tickets[ticket_number]['barcodes'].append(str(int(float(remove_leading_zero(values_line[5])))))
+        tickets[ticket_number]['qr_code'].extend([remove_leading_zero(values_line[25])] * int(float(remove_leading_zero(values_line[5]))))
   
-  # for ticket_number, ticket_data in tickets.items():
-  #   print(f'----- {ticket_number} -----')
-  #   for i, elem in enumerate(ticket_data["barcodes"]):
-  #     if i % 2 == 0:
-  #       print(f'{elem} ----------------')
-  #     print(elem)
+  for ticket_number, ticket_data in tickets.items():
+    for value in ticket_data["qr_code"]:
+      generate_ean(value)
   
-  lst = [1, 2, 4, 6, 7, 8, 3, 5]
-
-  for i in range(0, len(lst), 2):
-    val_i = lst[i]
-    val_i_plus_1 = lst[i+1]
-    print(f"val_i: {val_i}, val_i_plus_1: {val_i_plus_1}")
-
   return render_template('template.html', tickets=tickets)
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload_file():
-  # obtenemos el archivo del input "archivo"
   f = request.files['file']
   filename = secure_filename(f.filename)
   location_file = os.path.join(os.getcwd(), 'Salidapazosnuevo.txt')
