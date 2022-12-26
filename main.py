@@ -59,7 +59,7 @@ def mostrar_imagenes():
       if values_line[0] == "C" and values_line[1] == "1":
         ticket_number = values_line[3]
         tickets[ticket_number] = {'cashier_code': values_line[2], 'number_of_items': values_line[7], 'total_to_pay': values_line[8], 'qr_code': [], 'barcodes': []}
-      elif values_line[0] == "L" and values_line[2] == "1":
+      elif values_line[0] == "L" and values_line[2] == "1" and values_line[17] == "0":
         tickets[ticket_number]['qr_code'].extend([remove_leading_zero(values_line[25])] * int(float(remove_leading_zero(values_line[5]))))
   
   for ticket_number, ticket_data in tickets.items():
@@ -70,18 +70,16 @@ def mostrar_imagenes():
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload_file():
+  number = request.form['number']
+  print(number)
   f = request.files['file']
-  filename = secure_filename(f.filename)
-  location_file = os.path.join(os.getcwd(), 'Salidapazosnuevo.txt')
-  f.save(location_file)
-    # file = request.files.get('file')
-    # if file:
-    #     # Procesar el archivo aquí
-    #     return 'Archivo cargado exitosamente'
-    # else:
-    #     return 'No se ha seleccionado ningún archivo'
-  # return render_template('form.html')
-  return redirect('/imagenes')
+  if f:
+    filename = secure_filename(f.filename)
+    location_file = os.path.join(os.getcwd(), 'Salidapazosnuevo.txt')
+    f.save(location_file)
+    return redirect('/imagenes')
+  else:
+    return 'No se ha seleccionado ningún archivo'
 
 if __name__ == '__main__':
   app.run(debug=True)
