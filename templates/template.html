@@ -10,7 +10,7 @@
 
 <body>
   {% for ticket_number, ticket_data in tickets.items() %}
-    <p>Caja: {{ticket_data["cashier_code"]}} -- Ticket: {{ ticket_number}} -- Cant Artículos: {{ticket_data["number_of_items"]}} -- Total a pagar: {{ticket_data["total_to_pay"]}}</p>
+    <p>Caja: {{ticket_data["cashier_code"]}} -- Ticket: {{ ticket_number}} -- Total a pagar: {{ticket_data["total_to_pay"]}}</p>
     <div class="qr-contaner">
       {% for value in ticket_data["qr_code"] %}
           <div class="qr-value"> <img src="/static/images/{{value}}.svg" alt={{value}}> </div>

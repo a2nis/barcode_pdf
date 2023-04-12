@@ -1,5 +1,5 @@
 from flask import Flask, render_template
-from flask import Flask, request, redirect
+from flask import Flask, request, redirect, url_for
 import barcode
 import re
 from collections import Counter
@@ -56,22 +56,34 @@ def mostrar_imagenes():
       if "|" in line:
         numeral_symbol = False
       values_line = line.split(separator[numeral_symbol])
-      if values_line[0] == "C" and values_line[1] == "1":
+      if (values_line[0] == "C" and values_line[1] == "1" and values_line[3] == number) or (values_line[0] == "C" and values_line[1] == "1"):
         ticket_number = values_line[3]
         tickets[ticket_number] = {'cashier_code': values_line[2], 'number_of_items': values_line[7], 'total_to_pay': values_line[8], 'qr_code': [], 'barcodes': []}
-      elif values_line[0] == "L" and values_line[2] == "1" and values_line[17] == "0":
+      elif values_line[0] == "L" and values_line[2] == "1" and values_line[17] == "0" :
         tickets[ticket_number]['qr_code'].extend([remove_leading_zero(values_line[25])] * int(float(remove_leading_zero(values_line[5]))))
-  
-  for ticket_number, ticket_data in tickets.items():
-    for value in ticket_data["qr_code"]:
-      generate_ean(value)
+
+  if number:
+    if number in tickets:
+      qr_codes_ticket = tickets[number]['qr_code']
+      for qr_code in qr_codes_ticket:
+        generate_ean(qr_code)
+      for clave in list(tickets.keys()):
+        if clave != number:
+          del tickets[clave]
+    else:
+      return f"Ticket {number} no existe en el cstview "
+  else:
+    for objeto in tickets.values():
+        qr_codes = objeto['qr_code']
+        for qr_code in qr_codes:
+            generate_ean(qr_code)
   
   return render_template('template.html', tickets=tickets)
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload_file():
+  global number 
   number = request.form['number']
-  print(number)
   f = request.files['file']
   if f:
     filename = secure_filename(f.filename)
